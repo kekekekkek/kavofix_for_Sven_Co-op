@@ -16,5 +16,8 @@ You can use this together with SvenMod, or inject the module separately. <br>May
 Также, Вы можете использовать этот модуль со SvenMod, или же инжектить его отдельно, на Ваше усмотрение.<br>
 P.S: И да, пж извините за мой английский, ибо я слишком тупой и ленивый чтобы выучить его нормально.
 
+### Compile
+Release/x86
+
 ### Screenshot
 ![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/main/img/Screenshot_1.png)
