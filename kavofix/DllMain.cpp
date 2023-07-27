@@ -5,10 +5,10 @@ UnknownFuncFn OrigUnknownFunc;
 
 int IsWhiteSpace(string strText, int iStart, int iEnd)
 {
-	if (iStart >= iEnd)
+	if (iStart >= iEnd && strText[iEnd] != 34)
 		return -1;
 
-	for (int i = iStart; i < strText.length(); i++)
+	for (int i = iStart; i < iEnd; i++)
 	{
 		if (strText[i] == 34)
 			continue;
