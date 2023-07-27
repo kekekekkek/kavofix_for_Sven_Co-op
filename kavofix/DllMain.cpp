@@ -3,48 +3,60 @@
 typedef void (*UnknownFuncFn)();
 UnknownFuncFn OrigUnknownFunc;
 
+int IsWhiteSpace(string strText, int iStart, int iEnd)
+{
+	if (iStart >= iEnd)
+		return -1;
+
+	for (int i = iStart; i < strText.length(); i++)
+	{
+		if (strText[i] == 34)
+			continue;
+
+		if (strText[i] != 32)
+			return 0;
+	}
+
+	return 1;
+}
+
 void UnknownFuncHook()
 {
-	char chText[500];
-	char* chInsert = NULL;
+	char chStr[500];
+	void* pStr = NULL;
+	string strStr = "";
 
-	uintptr_t uCommand = ((uintptr_t)GetModuleHandleA("hw.dll") + 0xFEDA88);
-	memcpy(chText, (void*)uCommand, sizeof(chText));
+	_asm 
+	{ 
+		lea edx, [esp]
+		mov pStr, edx
+	}
 
-	char chIntermediate[500];
-	ZeroMemory(chIntermediate, sizeof(chIntermediate));
-
-	if (strstr(chText, "say") && chText[0] == 's')
+	for (int a = 0; a < 4096; a += 4)
 	{
-		if (strlen(chText) == (chText[3] != '_' ? 6 : 11))
-			goto Skip;
+		memcpy(chStr, ((void*)((uintptr_t)pStr + a)), sizeof(chStr));
 
-		for (int i = (chText[3] != '_' ? 5 : 10); i < strlen(chText); i++)
+		if (strstr(chStr, "say"))
 		{
-			if (chText[i] == '"')
+			strStr = string(chStr).insert((chStr[3] != 95 ? 5 : 10), "/me ");
+
+			if (IsWhiteSpace(strStr, (chStr[3] != 95 ? 10 : 17), strStr.length() - 1) == 1)
+				goto Skip;
+
+			for (int b = (chStr[3] != 95 ? 10 : 17); b < strStr.length() - 1; b++)
 			{
-				chText[(chText[3] != '_' ? 4 : 9)] = 0;
-				break;
+				if (strStr[b] == 32)
+					continue;
+
+				if (strStr[b] > 0 && strStr[b] < 256)
+					goto Skip;
 			}
 
-			chIntermediate[i - (chText[3] != '_' ? 5 : 10)] = chText[i];
+			for (int b = 0; b < strStr.length(); b++)
+				memset(((void*)((uintptr_t)pStr + a + b)), (int)strStr[b], 1);
+
+			memset(((void*)((uintptr_t)pStr + a + strStr.length())), 0, 1);
 		}
-
-		chInsert = strcat(strcat(chText, "/me "), chIntermediate);
-
-		for (int i = 0; i < strlen(chIntermediate); i++)
-		{
-			if (chIntermediate[i] == 32)
-				continue;
-
-			if (chIntermediate[i] > 0 && chIntermediate[i] < 256)
-				goto Skip;
-		}
-
-		for (int i = 0; i < strlen(chInsert); i++)
-			memset((void*)(uCommand + i), (int)chInsert[i], 1);
-
-		memset((void*)(uCommand + strlen(chInsert)), 0, 1);
 	}
 
 Skip:
@@ -55,8 +67,8 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReasonForCall, LPVOID lpReserved)
 {
 	if (dwReasonForCall == DLL_PROCESS_ATTACH)
 	{
-		uintptr_t uInstruct = ((uintptr_t)GetModuleHandleA("hw.dll") + 0x3C12F);
-		OrigUnknownFunc = (UnknownFuncFn)TrampHook32((char*)uInstruct, (char*)UnknownFuncHook, 5);
+		uintptr_t uFunc = ((uintptr_t)GetModuleHandleA("hw.dll") + 0x6D580);
+		OrigUnknownFunc = (UnknownFuncFn)TrampHook32((char*)uFunc, (char*)UnknownFuncHook, 6);
 	}
 
 	return TRUE;
