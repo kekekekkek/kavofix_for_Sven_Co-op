@@ -13,24 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Detours">
-      <UniqueIdentifier>{fc12164d-9fd6-410e-be03-c48703a8618f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DllMain.cpp">
+    <ClCompile Include="Plugin.cpp">
       <Filter>CPP</Filter>
     </ClCompile>
-    <ClCompile Include="Detours.cpp">
-      <Filter>Detours</Filter>
+    <ClCompile Include="KavoFix.cpp">
+      <Filter>CPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Plugin.h">
+      <Filter>H</Filter>
+    </ClInclude>
     <ClInclude Include="Include.h">
       <Filter>H</Filter>
     </ClInclude>
-    <ClInclude Include="Detours.h">
-      <Filter>Detours</Filter>
+    <ClInclude Include="KavoFix.h">
+      <Filter>H</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string>
-#include <string.h>
-#include <Windows.h>
-#include "Detours.h"
+#include <interface.h>
+#include <IClientPlugin.h>
+
+#include "Plugin.h"
+#include "KavoFix.h"
 
 using namespace std;
