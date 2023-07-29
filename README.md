@@ -23,4 +23,4 @@ P.S: И да, пж извините за мой английский, ибо я 
 Release/x86
 
 ### Screenshot
-![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/main/img/Screenshot_1.png)
+![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/original/img/Screenshot_1.png)
