@@ -3,6 +3,8 @@
 CKavoFixPlugin g_KavoFixPlugin;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CKavoFixPlugin, IClientPlugin, CLIENT_PLUGIN_INTERFACE_VERSION, g_KavoFixPlugin);
 
+ConVar kavofix("kavofix", "1", FCVAR_CLIENTDLL, "Allows you to enable or disable this plugin.");
+
 api_version_s CKavoFixPlugin::GetAPIVersion()
 {
 	return SVENMOD_API_VER;
@@ -11,6 +13,9 @@ api_version_s CKavoFixPlugin::GetAPIVersion()
 bool CKavoFixPlugin::Load(CreateInterfaceFn pfnSvenModFactory, ISvenModAPI* pSvenModAPI, IPluginHelpers* pPluginHelpers)
 {
 	BindApiToGlobals(pSvenModAPI);
+	ConVar_Register();
+
+	ConColorMsg(Color(40, 255, 0, 255), "[KavoFix] Successfully loaded!\n");
 	return true;
 }
 
@@ -21,7 +26,7 @@ void CKavoFixPlugin::PostLoad(bool bGlobalLoad)
 
 void CKavoFixPlugin::Unload(void)
 {
-
+	ConVar_Unregister();
 }
 
 bool CKavoFixPlugin::Pause(void)
@@ -88,7 +93,7 @@ const char* CKavoFixPlugin::GetAuthor(void)
 
 const char* CKavoFixPlugin::GetVersion(void)
 {
-	return "0.1";
+	return "0.2";
 }
 
 const char* CKavoFixPlugin::GetDescription(void)

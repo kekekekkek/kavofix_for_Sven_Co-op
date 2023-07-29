@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dbg.h>
+#include <convar.h>
 #include <interface.h>
 #include <IClientPlugin.h>
 
@@ -7,3 +9,4 @@
 #include "KavoFix.h"
 
 using namespace std;
+extern ConVar kavofix;

@@ -25,6 +25,9 @@ void UnknownFuncHook()
 	void* pStr = NULL;
 	string strStr = "";
 
+	if (!kavofix.GetBool())
+		goto Skip;
+
 	_asm
 	{
 		lea edx, [esp]
