@@ -19,8 +19,13 @@ Maybe this fix can be made much easier, but at the moment it works as it should 
 Подробную инструкцию с работой SvenMod и его плагинов Вы сможете прочитать тут: https://github.com/sw1ft747/svenmod<br>
 P.S: И да, пж извините за мой английский, ибо я слишком тупой и ленивый чтобы выучить его нормально.
 
+### Usage
+| Console Variable | Default Value | Type | Description |
+| ---------------- | ------------- | ---- | ----------- |
+| kavofix | 1 | bool | Allows you to enable or disable this plugin. |
+
 ### Compile
 Release/x86
 
 ### Screenshot
-![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/main/img/Screenshot_1.png)
+![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_1.png)
