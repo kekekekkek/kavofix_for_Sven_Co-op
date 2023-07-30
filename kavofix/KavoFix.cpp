@@ -1,6 +1,7 @@
 #include "Include.h"
 
 UnknownFuncFn OrigUnknownFunc;
+DetourHandle_t dhHandle = NULL;
 
 int IsWhiteSpace(string strText, int iStart, int iEnd)
 {
@@ -19,14 +20,19 @@ int IsWhiteSpace(string strText, int iStart, int iEnd)
 	return 1;
 }
 
+char* ToLowerCase(char* chArray)
+{
+	for (int i = 0; i < strlen(chArray); i++)
+		chArray[i] = ((char)tolower(chArray[i]));
+
+	return chArray;
+}
+
 void UnknownFuncHook()
 {
 	char chStr[500];
 	void* pStr = NULL;
 	string strStr = "";
-
-	if (!kavofix.GetBool())
-		goto Skip;
 
 	_asm
 	{
@@ -38,9 +44,23 @@ void UnknownFuncHook()
 	{
 		memcpy(chStr, ((void*)((uintptr_t)pStr + a)), sizeof(chStr));
 
-		if (strstr(chStr, "say"))
+		if (strstr(ToLowerCase(chStr), "say"))
 		{
-			strStr = string(chStr).insert((chStr[3] != 95 ? 5 : 10), "/me ");
+			if (chStr[(chStr[3] != 95 ? 4 : 9)] != 34 && chStr[strlen(chStr) - 1] != 34)
+			{
+				strStr = string(chStr).insert((chStr[3] != 95 ? 4 : 9), "\"/me ").append("\"");
+
+				for (int i = (strStr[3] != 95 ? 9 : 14); i < strStr.length(); i++)
+				{
+					if (strStr[i] != 32)
+					{
+						strStr.erase((strStr[3] != 95 ? 9 : 14), abs(((strStr[3] != 95 ? 9 : 14) - i)));
+						break;
+					}
+				}
+			}
+			else
+				strStr = string(chStr).insert((chStr[3] != 95 ? 5 : 10), "/me ");
 
 			if (IsWhiteSpace(strStr, (chStr[3] != 95 ? 10 : 17), strStr.length() - 1) == 1)
 				goto Skip;

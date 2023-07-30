@@ -21,12 +21,13 @@ bool CKavoFixPlugin::Load(CreateInterfaceFn pfnSvenModFactory, ISvenModAPI* pSve
 
 void CKavoFixPlugin::PostLoad(bool bGlobalLoad)
 {
-	g_pDetoursAPI->DetourFunction(((void*)((uintptr_t)GetModuleHandleA("hw.dll") + 0x6D580)), (void*)UnknownFuncHook, GET_FUNC_PTR(OrigUnknownFunc));
+	dhHandle = g_pDetoursAPI->DetourFunction(((void*)((uintptr_t)GetModuleHandleA("hw.dll") + 0x6D580)), (void*)UnknownFuncHook, GET_FUNC_PTR(OrigUnknownFunc));
 }
 
 void CKavoFixPlugin::Unload(void)
 {
 	ConVar_Unregister();
+	g_pDetoursAPI->RemoveDetour(dhHandle);
 }
 
 bool CKavoFixPlugin::Pause(void)
@@ -93,7 +94,7 @@ const char* CKavoFixPlugin::GetAuthor(void)
 
 const char* CKavoFixPlugin::GetVersion(void)
 {
-	return "0.2";
+	return "0.3";
 }
 
 const char* CKavoFixPlugin::GetDescription(void)
