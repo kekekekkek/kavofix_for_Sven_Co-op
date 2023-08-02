@@ -104,7 +104,7 @@ const char* CKavoFixPlugin::GetDescription(void)
 
 const char* CKavoFixPlugin::GetURL(void)
 {
-	return "https://github.com/kekekekkek";
+	return "https://github.com/kekekekkek/kavofix_for_Sven_Co-op";
 }
 
 const char* CKavoFixPlugin::GetDate(void)
