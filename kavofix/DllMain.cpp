@@ -20,12 +20,12 @@ int IsWhiteSpace(string strText, int iStart, int iEnd)
 	return 1;
 }
 
-char* ToLowerCase(char* chArray)
+string ToLowerCase(string strText)
 {
-	for (int i = 0; i < strlen(chArray); i++)
-		chArray[i] = ((char)tolower(chArray[i]));
+	for (int i = 0; i < strText.length(); i++)
+		strText[i] = ((char)tolower(strText[i]));
 
-	return chArray;
+	return strText;
 }
 
 void UnknownFuncHook()
@@ -34,52 +34,41 @@ void UnknownFuncHook()
 	void* pStr = NULL;
 	string strStr = "";
 
-	_asm
-	{
-		lea edx, [esp]
-		mov pStr, edx
-	}
+	memcpy(&pStr, ((void*)((uintptr_t)GetModuleHandleA("hw.dll") + 0x00FE9E14)), sizeof(void*));
+	memcpy(chStr, ((void*)((uintptr_t)pStr + 0x178)), sizeof(chStr));
 
-	for (int a = 0; a < 4096; a += 4)
-	{
-		memcpy(chStr, ((void*)((uintptr_t)pStr + a)), sizeof(chStr));
+	strStr = string(chStr);
 
-		if (strstr(ToLowerCase(chStr), "say"))
+	if (strstr(ToLowerCase(strStr).c_str(), "say"))
+	(
+		(strStr[(strStr[3] != 95 ? 4 : 9)] != 34 && strStr[strStr.length() - 1] != 34)
+		? strStr.insert((strStr[3] != 95 ? 4 : 9), "\"/me ").append("\"")
+		: strStr.insert((strStr[3] != 95 ? 5 : 10), "/me ")
+	);
+
+	for (int i = (strStr.find(34) + 5); i < strStr.find_last_of(34); i++)
+	{
+		if (strStr[i] != 32)
 		{
-			if (chStr[(chStr[3] != 95 ? 4 : 9)] != 34 && chStr[strlen(chStr) - 1] != 34)
-			{
-				strStr = string(chStr).insert((chStr[3] != 95 ? 4 : 9), "\"/me ").append("\"");
-
-				for (int i = (strStr[3] != 95 ? 9 : 14); i < strStr.length(); i++)
-				{
-					if (strStr[i] != 32)
-					{
-						strStr.erase((strStr[3] != 95 ? 9 : 14), abs(((strStr[3] != 95 ? 9 : 14) - i)));
-						break;
-					}
-				}
-			}
-			else
-				strStr = string(chStr).insert((chStr[3] != 95 ? 5 : 10), "/me ");
-
-			if (IsWhiteSpace(strStr, (chStr[3] != 95 ? 10 : 17), strStr.length() - 1) == 1)
-				goto Skip;
-
-			for (int b = (chStr[3] != 95 ? 10 : 17); b < strStr.length() - 1; b++)
-			{
-				if (strStr[b] == 32)
-					continue;
-
-				if (strStr[b] > 0 && strStr[b] < 256)
-					goto Skip;
-			}
-
-			for (int b = 0; b < strStr.length(); b++)
-				memset(((void*)((uintptr_t)pStr + a + b)), (int)strStr[b], 1);
-
-			memset(((void*)((uintptr_t)pStr + a + strStr.length())), 0, 1);
+			strStr.erase((strStr.find(34) + 5), (i - (strStr.find(34) + 5)));
+			break;
 		}
 	}
+
+	if (IsWhiteSpace(strStr, (strStr[3] != 95 ? 10 : 17), strStr.length() - 1) == 1)
+		goto Skip;
+
+	for (int i = (strStr[3] != 95 ? 10 : 17); i < strStr.length() - 1; i++)
+	{
+		if (strStr[i] == 32)
+			continue;
+
+		if (strStr[i] > 0 && strStr[i] < 256)
+			goto Skip;
+	}
+
+	memcpy(((void*)((uintptr_t)pStr + 0x178)), strStr.c_str(), strStr.length());
+	memset(((void*)((uintptr_t)pStr + 0x178 + strStr.length())), 0, 1);
 
 Skip:
 	return OrigUnknownFunc();
