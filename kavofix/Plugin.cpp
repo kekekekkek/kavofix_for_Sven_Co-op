@@ -4,6 +4,7 @@ CKavoFixPlugin g_KavoFixPlugin;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CKavoFixPlugin, IClientPlugin, CLIENT_PLUGIN_INTERFACE_VERSION, g_KavoFixPlugin);
 
 ConVar kavofix("kavofix", "1", FCVAR_CLIENTDLL, "Allows you to enable or disable this plugin.");
+ConVar kf_putalways("kf_putalways", "0", FCVAR_CLIENTDLL, "Always put the word \"/me\" at the beginning of the message?");
 
 api_version_s CKavoFixPlugin::GetAPIVersion()
 {
@@ -94,7 +95,7 @@ const char* CKavoFixPlugin::GetAuthor(void)
 
 const char* CKavoFixPlugin::GetVersion(void)
 {
-	return "0.3";
+	return "0.4";
 }
 
 const char* CKavoFixPlugin::GetDescription(void)

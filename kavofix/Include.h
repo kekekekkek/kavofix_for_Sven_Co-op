@@ -9,4 +9,6 @@
 #include "KavoFix.h"
 
 using namespace std;
+
 extern ConVar kavofix;
+extern ConVar kf_putalways;
