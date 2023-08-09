@@ -23,6 +23,7 @@ P.S: И да, пж извините за мой английский, ибо я 
 | Console Variable | Default Value | Type | Description |
 | ---------------- | ------------- | ---- | ----------- |
 | kavofix | 1 | bool | Allows you to enable or disable this plugin. |
+| kf_putalways | 0 | bool | Always put the word \"/me\" at the beginning of the message? |
 
 ### Compile
 Release/x86
