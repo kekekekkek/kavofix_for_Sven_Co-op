@@ -43,38 +43,53 @@ void UnknownFuncHook()
 		goto Skip;
 
 	if (strstr(ToLowerCase(strStr).c_str(), "say"))
-	(
-		(strStr[(strStr[3] != 95 ? 4 : 9)] != 34 && strStr[strStr.length() - 1] != 34)
-		? strStr.insert((strStr[3] != 95 ? 4 : 9), "\"/me ").append("\"")
-		: strStr.insert((strStr[3] != 95 ? 5 : 10), "/me ")
-	);
-
-	for (int i = (strStr.find(34) + 5); i < strStr.find_last_of(34); i++)
 	{
-		if (strStr[i] != 32)
+		if (kf_fixtype.GetInt() <= 0)
 		{
-			strStr.erase((strStr.find(34) + 5), (i - (strStr.find(34) + 5)));
-			break;
+			(
+				(strStr[(strStr[3] != 95 ? 4 : 9)] != 34 && strStr[strStr.length() - 1] != 34)
+				? strStr.insert((strStr[3] != 95 ? 4 : 9), "\"/me ").append("\"")
+				: strStr.insert((strStr[3] != 95 ? 5 : 10), "/me ")
+			);
 		}
-	}
+		else
+			strStr.insert((strStr.find_last_of(34)), (strlen(kf_addchar.GetString()) > 0 ? kf_addchar.GetString() : "`"));
 
-	if (IsWhiteSpace(strStr, (strStr[3] != 95 ? 10 : 17), strStr.length() - 1) == 1)
-		goto Skip;
-
-	if (!kf_putalways.GetBool())
-	{
-		for (int i = (strStr[3] != 95 ? 10 : 17); i < strStr.length() - 1; i++)
+		for (int i = (strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1)); i < strStr.find_last_of(34); i++)
 		{
-			if (strStr[i] == 32)
-				continue;
-
-			if (strStr[i] > 0 && strStr[i] < 256)
-				goto Skip;
+			if (strStr[i] != 32)
+			{
+				strStr.erase((strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1)), (i - (strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1))));
+				break;
+			}
 		}
-	}
 
-	memcpy(((void*)((uintptr_t)pStr + 0x178)), strStr.c_str(), strStr.length());
-	memset(((void*)((uintptr_t)pStr + 0x178 + strStr.length())), 0, 1);
+		if (IsWhiteSpace(strStr, (strStr[3] != 95 ? 9 : 14), strStr.length() - 1) == 1)
+			goto Skip;
+
+		if (!kf_putalways.GetBool())
+		{
+			for (int i = (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1 
+				? (strStr[3] != 95 ? 5 : 12) 
+				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 
+					? (strStr[3] != 95 ? 5 : 12) 
+					: (strStr[3] != 95 ? 9 : 14))); i < (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1
+				? strStr.length() - strlen(kf_addchar.GetString()) - 1 
+				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 
+					? strStr.length() - 2 
+					: strStr.length() - 1)); i++)
+			{
+				if (strStr[i] == 32)
+					continue;
+
+				if (strStr[i] > 0 && strStr[i] < 256)
+					goto Skip;
+			}
+		}
+
+		memcpy(((void*)((uintptr_t)pStr + 0x178)), strStr.c_str(), strStr.length());
+		memset(((void*)((uintptr_t)pStr + 0x178 + strStr.length())), 0, 1);
+	}
 
 Skip:
 	return OrigUnknownFunc();
