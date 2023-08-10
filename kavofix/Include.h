@@ -14,3 +14,4 @@ extern ConVar kavofix;
 extern ConVar kf_fixtype;
 extern ConVar kf_putalways;
 extern ConVar kf_addchar;
+extern ConVar kf_fixserverside;

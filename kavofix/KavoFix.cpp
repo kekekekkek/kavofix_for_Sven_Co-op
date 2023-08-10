@@ -28,6 +28,31 @@ string ToLowerCase(string strText)
 	return strText;
 }
 
+void FixServerSide(bool bShouldRestore)
+{
+	HMODULE hServer = GetModuleHandleA("server.dll");
+
+	if (hServer)
+	{
+		char chValue[500];
+		memcpy(chValue, ((void*)((uintptr_t)hServer + 0x3AE660)), sizeof(chValue));
+
+		if (strstr(chValue, (bShouldRestore ? "%c* %s" : "%c%s:")))
+		{
+			ZeroMemory(chValue, strlen(chValue));
+			strcat(chValue, (bShouldRestore ? "%c%s:" : "%c* %s"));
+
+			DWORD dwOldProtect = NULL;
+			VirtualProtect(((void*)((uintptr_t)hServer + 0x3AE660)), 7, PAGE_EXECUTE_READWRITE, &dwOldProtect);
+
+			ZeroMemory(((void*)((uintptr_t)hServer + 0x3AE660)), 7);
+
+			memcpy(((void*)((uintptr_t)hServer + 0x3AE660)), chValue, strlen(chValue));
+			VirtualProtect(((void*)((uintptr_t)hServer + 0x3AE660)), 7, dwOldProtect, &dwOldProtect);
+		}
+	}
+}
+
 void UnknownFuncHook()
 {
 	char chStr[500];
@@ -44,7 +69,10 @@ void UnknownFuncHook()
 
 	if (strstr(ToLowerCase(strStr).c_str(), "say"))
 	{
-		if (kf_fixtype.GetInt() <= 0)
+		FixServerSide(kf_fixserverside.GetBool());
+
+		if (kf_fixtype.GetInt() <= 0
+			|| kf_fixserverside.GetBool())
 		{
 			(
 				(strStr[(strStr[3] != 95 ? 4 : 9)] != 34 && strStr[strStr.length() - 1] != 34)
@@ -55,11 +83,11 @@ void UnknownFuncHook()
 		else
 			strStr.insert((strStr.find_last_of(34)), (strlen(kf_addchar.GetString()) > 0 ? kf_addchar.GetString() : "`"));
 
-		for (int i = (strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1)); i < strStr.find_last_of(34); i++)
+		for (int i = (strStr.find(34) + (kf_fixtype.GetInt() <= 0 || kf_fixserverside.GetBool() ? 5 : 1)); i < strStr.find_last_of(34); i++)
 		{
 			if (strStr[i] != 32)
 			{
-				strStr.erase((strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1)), (i - (strStr.find(34) + (kf_fixtype.GetInt() <= 0 ? 5 : 1))));
+				strStr.erase((strStr.find(34) + (kf_fixtype.GetInt() <= 0 || kf_fixserverside.GetBool() ? 5 : 1)), (i - (strStr.find(34) + (kf_fixtype.GetInt() <= 0 || kf_fixserverside.GetBool() ? 5 : 1))));
 				break;
 			}
 		}
@@ -69,13 +97,13 @@ void UnknownFuncHook()
 
 		if (!kf_putalways.GetBool())
 		{
-			for (int i = (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1 
+			for (int i = (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1 && !kf_fixserverside.GetBool()
 				? (strStr[3] != 95 ? 5 : 12) 
-				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 
+				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 && !kf_fixserverside.GetBool()
 					? (strStr[3] != 95 ? 5 : 12) 
-					: (strStr[3] != 95 ? 9 : 14))); i < (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1
+					: (strStr[3] != 95 ? 9 : 14))); i < (strlen(kf_addchar.GetString()) > 0 && kf_fixtype.GetInt() >= 1 && !kf_fixserverside.GetBool()
 				? strStr.length() - strlen(kf_addchar.GetString()) - 1 
-				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 
+				: (strlen(kf_addchar.GetString()) <= 0 && kf_fixtype.GetInt() >= 1 && !kf_fixserverside.GetBool()
 					? strStr.length() - 2 
 					: strStr.length() - 1)); i++)
 			{

@@ -7,6 +7,7 @@ ConVar kavofix("kavofix", "1", FCVAR_CLIENTDLL, "Allows you to enable or disable
 ConVar kf_fixtype("kf_fixtype", "0", FCVAR_CLIENTDLL, "Allows you to select fix type.");
 ConVar kf_putalways("kf_putalways", "0", FCVAR_CLIENTDLL, "Always put the word \"/me\"/specified character at the begin/end of the message?");
 ConVar kf_addchar("kf_addchar", "`", FCVAR_CLIENTDLL, "Adds the specified character to the end of the message depending on \"kf_fixtype\".");
+ConVar kf_fixserverside("kf_fixserverside", "1", FCVAR_CLIENTDLL, "Allows you to write in cyrillic on a local server without any problems.");
 
 api_version_s CKavoFixPlugin::GetAPIVersion()
 {
@@ -97,7 +98,7 @@ const char* CKavoFixPlugin::GetAuthor(void)
 
 const char* CKavoFixPlugin::GetVersion(void)
 {
-	return "0.5";
+	return "0.6";
 }
 
 const char* CKavoFixPlugin::GetDescription(void)
