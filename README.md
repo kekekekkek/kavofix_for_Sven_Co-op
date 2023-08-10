@@ -9,6 +9,8 @@ You can switch the branch and use this module as a plugin for SvenMod, or inject
 You can read instruction about SvenMod plugins here: https://github.com/sw1ft747/svenmod<br>
 Maybe this fix can be made much easier, but at the moment it works as it should xd
 
+P.S: Also, you can create a `.cfg` file in which you can store settings for console variables of this plugin.
+
 ### Russian
 Спустя год, я снова решил вернуться, чтобы попытаться исправить эту поебень. Спасибо моему другу, который случайно обнаружил одну вещь, которая стала для меня большой подсказкой :D
 
@@ -17,8 +19,8 @@ Maybe this fix can be made much easier, but at the moment it works as it should 
 А также, он обладает некоторыми его старыми особенностями. Но, теперь он более менее похож на то, чего я пытался добиться изначально, а именно корректное отображение кириллических сообщений в чате игры без указания дополнительных латинских символов.
 
 Также, Вы можете переключить ветку и использовать этот модуль в качестве плагина для SvenMod, или же инжектить оригинал отдельно, на Ваше усмотрение.<br><br>
-Подробную инструкцию с работой SvenMod и его плагинов Вы сможете прочитать тут: https://github.com/sw1ft747/svenmod<br>
-P.S: И да, пж извините за мой английский, ибо я слишком тупой и ленивый чтобы выучить его нормально.
+Подробную инструкцию с работой SvenMod и его плагинов Вы сможете прочитать тут: https://github.com/sw1ft747/svenmod<br><br>
+P.S: И да, пж извините за мой английский, ибо я слишком тупой и ленивый чтобы выучить его нормально. Также, Вы можете создать файл с расширением `.cfg`, где Вы сможете хранить настройки консольных переменных данного плагина.
 
 ### Usage
 | Console Variable | Default Value | Type | Description |
@@ -31,5 +33,9 @@ P.S: И да, пж извините за мой английский, ибо я 
 ### Compile
 Release/x86
 
-### Screenshot
-![Image alt](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_1.png)
+### Screenshots
+* FixType=0<br><br>
+![FixType0](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_1.png)
+
+* FixType=1<br><br>
+![FixType1](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_2.png)
