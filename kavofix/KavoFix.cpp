@@ -28,7 +28,7 @@ string ToLowerCase(string strText)
 	return strText;
 }
 
-void FixServerSide(bool bShouldRestore)
+void FixServerSide(bool bShouldntRestore)
 {
 	HMODULE hServer = GetModuleHandleA("server.dll");
 
@@ -37,10 +37,10 @@ void FixServerSide(bool bShouldRestore)
 		char chValue[500];
 		memcpy(chValue, ((void*)((uintptr_t)hServer + 0x3AE660)), sizeof(chValue));
 
-		if (strstr(chValue, (bShouldRestore ? "%c* %s" : "%c%s:")))
+		if (strstr(chValue, (bShouldntRestore ? "%c* %s" : "%c%s:")))
 		{
 			ZeroMemory(chValue, strlen(chValue));
-			strcat(chValue, (bShouldRestore ? "%c%s:" : "%c* %s"));
+			strcat(chValue, (bShouldntRestore ? "%c%s:" : "%c* %s"));
 
 			DWORD dwOldProtect = NULL;
 			VirtualProtect(((void*)((uintptr_t)hServer + 0x3AE660)), 7, PAGE_EXECUTE_READWRITE, &dwOldProtect);
