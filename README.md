@@ -27,8 +27,11 @@ P.S: И да, пж извините за мой английский, ибо я 
 | ---------------- | ------------- | ---- | ----------- |
 | kavofix | 1 | bool | Allows you to enable or disable this plugin. |
 | kf_fixtype | 0 | int | Allows you to select fix type. |
-| kf_putalways | 0 | bool | Always put the word "/me"/specified character at the begin/end of the message? |
+| kf_putalways | 0 | bool | Always put the word `/me`/specified character at the begin/end of the message? |
 | kf_addchar | "`" | string | Adds the specified character to the end of the message depending on \"kf_fixtype\". |
+| kf_fixserverside | 1 | bool | Allows you to write in cyrillic on a local server without any problems. |
+
+`kf_fixserverside` only works when you write `/me` before the message.
 
 ### Compile
 Release/x86
@@ -39,3 +42,6 @@ Release/x86
 
 * FixType=1<br><br>
 ![FixType1](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_2.png)
+
+* ServerSideFix=1<br><br>
+![ServerSideFix](https://github.com/kekekekkek/kavofix_for_Sven_Co-op/blob/svenmod/img/Screenshot_3.png)
