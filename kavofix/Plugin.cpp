@@ -25,13 +25,16 @@ bool CKavoFixPlugin::Load(CreateInterfaceFn pfnSvenModFactory, ISvenModAPI* pSve
 
 void CKavoFixPlugin::PostLoad(bool bGlobalLoad)
 {
-	dhHandle = g_pDetoursAPI->DetourFunction(((void*)((uintptr_t)GetModuleHandleA("hw.dll") + 0x6D580)), (void*)UnknownFuncHook, GET_FUNC_PTR(OrigUnknownFunc));
+	dhUnkFunc = g_pDetoursAPI->DetourFunction(((void*)((uintptr_t)GetModuleHandleA("hw.dll") + 0x6D580)), (void*)UnknownFuncHook, GET_FUNC_PTR(OrigUnknownFunc));
+	dhOutputDbgStr = g_pDetoursAPI->DetourFunction(((void*)GetProcAddress(GetModuleHandleA("KernelBase.dll"), "OutputDebugStringA")), (void*)OutputDebugStringHook, GET_FUNC_PTR(OrigOutputDbgStr));
 }
 
 void CKavoFixPlugin::Unload(void)
 {
 	ConVar_Unregister();
-	g_pDetoursAPI->RemoveDetour(dhHandle);
+
+	g_pDetoursAPI->RemoveDetour(dhUnkFunc);
+	g_pDetoursAPI->RemoveDetour(dhOutputDbgStr);
 }
 
 bool CKavoFixPlugin::Pause(void)
@@ -61,7 +64,7 @@ void CKavoFixPlugin::OnEndLoading(void)
 
 void CKavoFixPlugin::OnDisconnect(void)
 {
-
+	bKavoFix_ServerPlugin = false;
 }
 
 void CKavoFixPlugin::GameFrame(client_state_t state, double frametime, bool bPostRunCmd)
@@ -98,7 +101,7 @@ const char* CKavoFixPlugin::GetAuthor(void)
 
 const char* CKavoFixPlugin::GetVersion(void)
 {
-	return "0.6";
+	return "0.7";
 }
 
 const char* CKavoFixPlugin::GetDescription(void)

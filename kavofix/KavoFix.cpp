@@ -1,7 +1,12 @@
 #include "Include.h"
 
+bool bKavoFix_ServerPlugin = false;
+
 UnknownFuncFn OrigUnknownFunc;
-DetourHandle_t dhHandle = NULL;
+OutputDebugStringFn OrigOutputDbgStr;
+
+DetourHandle_t dhUnkFunc = NULL;
+DetourHandle_t dhOutputDbgStr = NULL;
 
 int IsWhiteSpace(string strText, int iStart, int iEnd)
 {
@@ -69,7 +74,15 @@ void UnknownFuncHook()
 
 	if (strstr(ToLowerCase(strStr).c_str(), "say"))
 	{
-		FixServerSide(kf_fixserverside.GetBool());
+		if (!bKavoFix_ServerPlugin)
+			FixServerSide(kf_fixserverside.GetBool());
+		else
+		{
+			FixServerSide(false);
+
+			if (!kf_putalways.GetBool())
+				goto Skip;
+		}
 
 		if (kf_fixtype.GetInt() <= 0
 			|| kf_fixserverside.GetBool())
@@ -121,4 +134,12 @@ void UnknownFuncHook()
 
 Skip:
 	return OrigUnknownFunc();
+}
+
+void OutputDebugStringHook(const char* cchMsg)
+{
+	if (strstr(cchMsg, "\"!askavofix\" was found on this server!\n"))
+		bKavoFix_ServerPlugin = true;
+
+	return OrigOutputDbgStr(cchMsg);
 }
